@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Petits Défis CE1 - L'alphabet</title>
+<style>
+:root{
+  --navy:#17324d;
+  --orange:#f2b36d;
+  --cream:#fffaf3;
+  --green:#2f8f57;
+  --red:#c94c4c;
+  --purple:#6c63d9;
+  --blue:#8fd3ff;
+  --pink:#f8b5c8;
+  --mint:#a8e6b0;
+  --yellow:#ffe38b;
+  --lav:#c7b8ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#fff8ef,#fde2ba);
+  color:#222;
+}
+.app{
+  max-width:980px;
+  margin:0 auto;
+  padding:18px;
+}
+.shell{
+  background:#fff;
+  border:3px solid #efdbc0;
+  box-shadow:0 10px 28px rgba(0,0,0,.10);
+  overflow:hidden;
+}
+header{
+  text-align:center;
+  padding:18px;
+  background:linear-gradient(135deg,#ffe7bd,#ffd49a 55%,#fff0d3);
+  border-bottom:3px solid #f0d4ad;
+}
+.brand{
+  color:var(--navy);
+  font-size:14px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+h1{
+  margin:8px 0 4px;
+  font-size:clamp(30px,4vw,44px);
+  color:#111;
+}
+.subtitle{
+  margin:0;
+  font-size:18px;
+  color:#5d5d5d;
+}
+main{padding:20px}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+.stat{
+  background:#fff8ef;
+  border:2px solid #ead1ad;
+  padding:10px;
+  text-align:center;
+  color:var(--navy);
+  font-weight:900;
+}
+.stat strong{
+  display:block;
+  font-size:28px;
+  margin-top:4px;
+}
+.progress{
+  height:14px;
+  background:#f1e5d3;
+  border:1px solid #e2caa8;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.progress div{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#17324d,#4d789e);
+  transition:width .25s ease;
+}
+.game-zone{
+  background:linear-gradient(180deg,#fffdf9,#fff5e8);
+  border:2px solid #ecd4b3;
+  padding:24px 18px;
+  text-align:center;
+}
+.mode{
+  display:inline-block;
+  background:#ffe4ad;
+  border:2px solid #efc66f;
+  color:var(--navy);
+  padding:8px 16px;
+  font-weight:900;
+  font-size:18px;
+  margin-bottom:18px;
+}
+.instruction{
+  font-size:clamp(24px,4vw,34px);
+  font-weight:900;
+  color:var(--navy);
+  margin-bottom:22px;
+}
+.letter-line{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:10px auto 26px;
+}
+.letter{
+  width:74px;
+  height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:3px solid rgba(23,50,77,.28);
+  font-size:42px;
+  font-weight:900;
+  color:var(--navy);
+}
+.letter:nth-child(5n+1){background:var(--blue)}
+.letter:nth-child(5n+2){background:var(--pink)}
+.letter:nth-child(5n+3){background:var(--mint)}
+.letter:nth-child(5n+4){background:var(--yellow)}
+.letter:nth-child(5n){background:var(--lav)}
+.question-mark{
+  background:white !important;
+  border:3px dashed #d78e36 !important;
+  color:#d78e36 !important;
+}
+.choices{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  max-width:720px;
+  margin:0 auto;
+}
+.choice{
+  min-height:76px;
+  border:3px solid #d79a55;
+  background:#fffaf3;
+  color:var(--navy);
+  font-size:38px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.15s ease;
+}
+.choice:hover{background:#fff0d8}
+.choice.correct{
+  border-color:var(--green);
+  background:#e6f5ec;
+  color:#1f6c42;
+}
+.choice.wrong{
+  border-color:var(--red);
+  background:#fdeaea;
+  color:#9b2d2d;
+}
+.choice:disabled{cursor:default}
+.feedback{
+  min-height:38px;
+  margin:18px 0 8px;
+  font-size:24px;
+  font-weight:900;
+}
+.actions{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:12px;
+}
+button.action{
+  border:none;
+  color:white;
+  padding:14px 24px;
+  font-size:20px;
+  font-weight:900;
+  cursor:pointer;
+}
+.next{background:var(--green);display:none}
+.replay{background:var(--purple)}
+.end{
+  display:none;
+  text-align:center;
+  padding:32px 12px 18px;
+}
+.end h2{
+  margin:0 0 10px;
+  font-size:42px;
+  color:var(--navy);
+}
+.end p{
+  font-size:24px;
+  font-weight:900;
+}
+.help{
+  margin-top:16px;
+  font-size:16px;
+  color:#666;
+  background:#fff8ef;
+  border:2px solid #edd5b3;
+  padding:10px;
+}
+@media(max-width:680px){
+  .stats{grid-template-columns:1fr}
+  .choices{grid-template-columns:1fr 1fr}
+  .letter{width:58px;height:58px;font-size:34px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="shell">
+    <header>
+      <div class="brand">Les Petits Défis CE1</div>
+      <h1>Le défi de l'alphabet</h1>
+      <p class="subtitle">Trouve la lettre qui suit ou la lettre qui précède.</p>
+    </header>
+
+    <main>
+      <section id="game">
+        <div class="stats">
+          <div class="stat">Question<strong id="qnum">1 / 10</strong></div>
+          <div class="stat">Score<strong id="score">0</strong></div>
+          <div class="stat">Réussites<strong id="good">0</strong></div>
+        </div>
+
+        <div class="progress"><div id="bar"></div></div>
+
+        <div class="game-zone">
+          <div class="mode" id="mode">Quelle lettre suit ?</div>
+          <div class="instruction" id="instruction">Quelle lettre vient juste après ?</div>
+
+          <div class="letter-line" id="letterLine"></div>
+
+          <div class="choices" id="choices"></div>
+
+          <div class="feedback" id="feedback" aria-live="polite"></div>
+
+          <div class="actions">
+            <button class="action next" id="nextBtn" type="button">Question suivante</button>
+          </div>
+
+          <div class="help">Observe bien l'ordre des lettres de l'alphabet.</div>
+        </div>
+      </section>
+
+      <section class="end" id="end">
+        <h2>Bravo !</h2>
+        <p id="finalText"></p>
+        <button class="action replay" id="replayBtn" type="button">Rejouer</button>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+let questions=[];
+let current=0;
+let score=0;
+let good=0;
+let locked=false;
+
+const qnum=document.getElementById("qnum");
+const scoreEl=document.getElementById("score");
+const goodEl=document.getElementById("good");
+const bar=document.getElementById("bar");
+const modeEl=document.getElementById("mode");
+const instructionEl=document.getElementById("instruction");
+const letterLine=document.getElementById("letterLine");
+const choicesEl=document.getElementById("choices");
+const feedback=document.getElementById("feedback");
+const nextBtn=document.getElementById("nextBtn");
+const game=document.getElementById("game");
+const end=document.getElementById("end");
+const finalText=document.getElementById("finalText");
+const replayBtn=document.getElementById("replayBtn");
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function makeQuestions(){
+  const result=[];
+  const used=new Set();
+
+  while(result.length<10){
+    const type=Math.random()<0.5?"next":"prev";
+    let idx;
+
+    if(type==="next"){
+      idx=2+Math.floor(Math.random()*20); // C à V
+    }else{
+      idx=3+Math.floor(Math.random()*20); // D à W
+    }
+
+    const key=type+"-"+idx;
+    if(used.has(key)) continue;
+    used.add(key);
+
+    const answerIndex=type==="next" ? idx+1 : idx-1;
+    const answer=alphabet[answerIndex];
+
+    let displayed=[];
+    if(type==="next"){
+      const start=Math.max(0,idx-3);
+      displayed=alphabet.slice(start,idx+1);
+      displayed.push("?");
+    }else{
+      displayed=["?"];
+      const end=Math.min(alphabet.length,idx+4);
+      displayed.push(...alphabet.slice(idx,end));
+    }
+
+    let distractors=[];
+    const candidates=[
+      alphabet[Math.max(0,answerIndex-2)],
+      alphabet[Math.max(0,answerIndex-1)],
+      alphabet[Math.min(25,answerIndex+1)],
+      alphabet[Math.min(25,answerIndex+2)],
+      alphabet[Math.min(25,answerIndex+3)]
+    ].filter(x=>x!==answer);
+
+    distractors=[...new Set(candidates)].slice(0,3);
+    while(distractors.length<3){
+      const x=alphabet[Math.floor(Math.random()*26)];
+      if(x!==answer && !distractors.includes(x)) distractors.push(x);
+    }
+
+    result.push({
+      type,
+      displayed,
+      answer,
+      choices:shuffle([answer,...distractors])
+    });
+  }
+  return result;
+}
+
+function render(){
+  locked=false;
+  const q=questions[current];
+
+  qnum.textContent=`${current+1} / ${questions.length}`;
+  scoreEl.textContent=score;
+  goodEl.textContent=good;
+  bar.style.width=`${(current/questions.length)*100}%`;
+
+  if(q.type==="next"){
+    modeEl.textContent="Quelle lettre suit ?";
+    instructionEl.textContent="Quelle lettre vient juste après cette série ?";
+  }else{
+    modeEl.textContent="Quelle lettre précède ?";
+    instructionEl.textContent="Quelle lettre vient juste avant cette série ?";
+  }
+
+  feedback.textContent="";
+  nextBtn.style.display="none";
+
+  letterLine.innerHTML="";
+  q.displayed.forEach(ch=>{
+    const d=document.createElement("div");
+    d.className="letter"+(ch==="?"?" question-mark":"");
+    d.textContent=ch;
+    letterLine.appendChild(d);
+  });
+
+  choicesEl.innerHTML="";
+  q.choices.forEach(ch=>{
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="choice";
+    btn.textContent=ch;
+    btn.addEventListener("click",()=>choose(ch,btn));
+    choicesEl.appendChild(btn);
+  });
+}
+
+function choose(ch,btn){
+  if(locked) return;
+  locked=true;
+  const q=questions[current];
+  const buttons=[...choicesEl.querySelectorAll(".choice")];
+  buttons.forEach(b=>b.disabled=true);
+
+  if(ch===q.answer){
+    score++;
+    good++;
+    btn.classList.add("correct");
+    feedback.style.color="var(--green)";
+    feedback.textContent=`Bravo ! La bonne lettre est ${q.answer}.`;
+  }else{
+    btn.classList.add("wrong");
+    const correctBtn=buttons.find(b=>b.textContent===q.answer);
+    if(correctBtn) correctBtn.classList.add("correct");
+    feedback.style.color="var(--red)";
+    feedback.textContent=`La bonne lettre était ${q.answer}.`;
+  }
+
+  scoreEl.textContent=score;
+  goodEl.textContent=good;
+  bar.style.width=`${((current+1)/questions.length)*100}%`;
+  nextBtn.style.display="inline-block";
+}
+
+function next(){
+  current++;
+  if(current>=questions.length){
+    game.style.display="none";
+    end.style.display="block";
+    let txt=`Tu as obtenu ${score} bonne${score>1?"s":""} réponse${score>1?"s":""} sur ${questions.length}.`;
+    if(score===10) txt+=" C'est un sans-faute !";
+    else if(score>=8) txt+=" Excellent travail !";
+    else if(score>=6) txt+=" Bon travail !";
+    else txt+=" Continue à t'entraîner.";
+    finalText.textContent=txt;
+    return;
+  }
+  render();
+}
+
+function replay(){
+  questions=makeQuestions();
+  current=0;
+  score=0;
+  good=0;
+  game.style.display="block";
+  end.style.display="none";
+  render();
+}
+
+nextBtn.addEventListener("click",next);
+replayBtn.addEventListener("click",replay);
+
+questions=makeQuestions();
+render();
+</script>
+</body>
+</html>
